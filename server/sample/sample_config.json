@@ -1,0 +1,9 @@
+{
+  "host": "localhost",
+  "port": "80",
+  "IP": "localhost",
+  "chooseIP": false,
+  "secure": false,
+  "debugLog": true,
+  "userShutdown": false
+}
