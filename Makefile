@@ -41,17 +41,17 @@ go.sum: go.mod
 test: test-unit
 
 test-unit:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m $(PACKAGES)
+	@sudo VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m $(PACKAGES)
 
 COVER_FILE := coverage.txt
 COVER_HTML_FILE := cover.html
 
 test-cover:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -coverprofile=$(COVER_FILE) -covermode=atomic $(PACKAGES)
+	@sudo VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -coverprofile=$(COVER_FILE) -covermode=atomic $(PACKAGES)
 	@go tool cover -html=$(COVER_FILE) -o $(COVER_HTML_FILE)
 
 bench:
-	@VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -bench=. $(PACKAGES)
+	@sudo VERSION=$(VERSION) go test -mod=readonly -v -timeout 30m -bench=. $(PACKAGES)
 
 .PHONY: test test-unit test-race test-cover bench
 

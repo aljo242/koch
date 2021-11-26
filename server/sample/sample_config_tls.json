@@ -1,0 +1,12 @@
+{
+  "host": "localhost",
+  "port": "443",
+  "IP": "localhost",
+  "chooseIP": false,
+  "secure": true,
+  "debugLog": true,
+  "userShutdown": false,
+  "certFile": "./sample/localhost.crt",
+  "keyFile": "./sample/localhost.key",
+  "rootCA": "./sample/rootCA.crt"
+}
