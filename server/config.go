@@ -29,6 +29,8 @@ type Config struct {
 }
 
 // errors declarations
+
+// ErrConfigNotJSON indicates that the config file cannot be parsed as JSON
 var ErrConfigNotJSON = errors.New("config file not JSON")
 
 // LoadConfig returns a config struct given a valid config.json file

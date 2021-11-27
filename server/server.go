@@ -137,11 +137,9 @@ func (srv *Server) Run(running chan struct{}) {
 				// unexpected error
 				log.Fatal().Err(err).Msg("ListenAndServeTLS() NOT IMPLEMENTED")
 			}
-		} else {
-			if err := srv.ListenAndServe(); err != http.ErrServerClosed {
-				// unexpected error
-				log.Fatal().Err(err).Msg("ListenAndServe()")
-			}
+		} else if err := srv.ListenAndServe(); err != http.ErrServerClosed {
+			// unexpected error
+			log.Fatal().Err(err).Msg("ListenAndServe()")
 		}
 	}()
 
@@ -164,7 +162,6 @@ func (srv *Server) Run(running chan struct{}) {
 			fmt.Printf("invalid code.\n")
 		}
 
-		//close(srv.quit)
 		err := srv.Quit()
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to quit server")
