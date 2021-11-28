@@ -66,4 +66,4 @@ linters-settings:
     go: "1.16"
     checks: ["all", "-SA1019"]
   stylecheck:
-    checks: ["all", "-ST1016", "ST1003"]
+    checks: ["all", "-ST1016", "-ST1003"]
