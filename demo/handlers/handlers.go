@@ -21,14 +21,16 @@ func RedirectHome() func(http.ResponseWriter, *http.Request) {
 // RedirectConstructionHandler redirects to the {HOST}/under-construction url (construction handler) with a 307 (temporary moved) status
 func RedirectConstructionHandler() func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Debug().Str("Handler", "RedirectConstructionHandler").Str("Request URL", r.URL.Path).Msg("incoming request")
-		http.Redirect(w, r, r.URL.Host+"/under-construction", http.StatusTemporaryRedirect)
+		if r != nil {
+			log.Debug().Str("Handler", "RedirectConstructionHandler").Str("Request URL", r.URL.Path).Msg("incoming request")
+			http.Redirect(w, r, r.URL.Host+"/under-construction", http.StatusTemporaryRedirect)
+		}
 	}
 }
 
 func ConstructionHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
+		if r.Method == http.MethodGet && r != nil {
 			log.Debug().Str("Handler", "ConstructionHandler").Msg("incoming request")
 			defer func() {
 				wantFile := filepath.Join(htmlDir, "construction.html")
@@ -53,7 +55,7 @@ func ConstructionHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Reques
 func HomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		if r.Method == http.MethodGet {
+		if r.Method == http.MethodGet && r != nil {
 			log.Debug().Str("Handler", "HomeHandler").Msg("incoming request")
 			defer func() {
 				wantFile := filepath.Join(htmlDir, "home.html")
@@ -94,37 +96,39 @@ func HomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 func ResumeHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		filename := filepath.Base(r.URL.Path)
-		log.Debug().Str("Handler", "ResumeHomeHandler").Str("Filename", filename).Msg("incoming request")
+		if r != nil {
+			filename := filepath.Base(r.URL.Path)
+			log.Debug().Str("Handler", "ResumeHomeHandler").Str("Filename", filename).Msg("incoming request")
 
-		if r.Method == http.MethodGet {
-			defer func() {
-				wantFile := filepath.Join(htmlDir, "resume.html")
-				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
-					w.WriteHeader(http.StatusNotFound)
-					log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
-					return
+			if r.Method == http.MethodGet {
+				defer func() {
+					wantFile := filepath.Join(htmlDir, "resume.html")
+					if _, err := os.Stat(wantFile); os.IsNotExist(err) {
+						w.WriteHeader(http.StatusNotFound)
+						log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
+						return
+					}
+
+					w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+					w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
+					http.ServeFile(w, r, wantFile)
+				}()
+
+				wantFile := cssDir + "resume.css"
+				chatFilepath, _ := filepath.Abs(wantFile)
+				wantFile = imgDir + "1favicon.ico"
+				faviconFilepath, _ := filepath.Abs(wantFile)
+				wantFile = imgDir + "cactus.jpg"
+				backgroundImage, _ := filepath.Abs(wantFile)
+
+				err := chef.PushFiles(w, chatFilepath, faviconFilepath, backgroundImage)
+				if err != nil {
+					log.Error().Err(err).Msg("Error pushing files")
 				}
-
-				w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-				w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
-				http.ServeFile(w, r, wantFile)
-			}()
-
-			wantFile := cssDir + "resume.css"
-			chatFilepath, _ := filepath.Abs(wantFile)
-			wantFile = imgDir + "1favicon.ico"
-			faviconFilepath, _ := filepath.Abs(wantFile)
-			wantFile = imgDir + "cactus.jpg"
-			backgroundImage, _ := filepath.Abs(wantFile)
-
-			err := chef.PushFiles(w, chatFilepath, faviconFilepath, backgroundImage)
-			if err != nil {
-				log.Error().Err(err).Msg("Error pushing files")
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
 			}
-		} else {
-			w.WriteHeader(http.StatusBadRequest)
-			return
 		}
 	}
 }
@@ -133,33 +137,35 @@ func ResumeHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request)
 func TunesHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		filename := filepath.Base(r.URL.Path)
-		log.Debug().Str("Handler", "ResumeHomeHandler").Str("Filename", filename).Msg("incoming request")
+		if r != nil {
+			filename := filepath.Base(r.URL.Path)
+			log.Debug().Str("Handler", "ResumeHomeHandler").Str("Filename", filename).Msg("incoming request")
 
-		if r.Method == http.MethodGet {
-			defer func() {
-				wantFile := filepath.Join(htmlDir, "resume.html")
-				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
-					w.WriteHeader(http.StatusNotFound)
-					log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
-					return
+			if r.Method == http.MethodGet {
+				defer func() {
+					wantFile := filepath.Join(htmlDir, "resume.html")
+					if _, err := os.Stat(wantFile); os.IsNotExist(err) {
+						w.WriteHeader(http.StatusNotFound)
+						log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
+						return
+					}
+
+					w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+					w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
+					http.ServeFile(w, r, wantFile)
+				}()
+
+				wantFile := cssDir + "resume.css"
+				chatFilepath, _ := filepath.Abs(wantFile)
+
+				err := chef.PushFiles(w, chatFilepath)
+				if err != nil {
+					log.Error().Err(err).Msg("Error pushing files")
 				}
-
-				w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-				w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
-				http.ServeFile(w, r, wantFile)
-			}()
-
-			wantFile := cssDir + "resume.css"
-			chatFilepath, _ := filepath.Abs(wantFile)
-
-			err := chef.PushFiles(w, chatFilepath)
-			if err != nil {
-				log.Error().Err(err).Msg("Error pushing files")
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
 			}
-		} else {
-			w.WriteHeader(http.StatusBadRequest)
-			return
 		}
 	}
 }
@@ -168,33 +174,35 @@ func TunesHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) 
 func HallofArtHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		filename := filepath.Base(r.URL.Path)
-		log.Debug().Str("Handler", "HallofArtHomeHandler").Str("Filename", filename).Msg("incoming request")
+		if r != nil {
+			filename := filepath.Base(r.URL.Path)
+			log.Debug().Str("Handler", "HallofArtHomeHandler").Str("Filename", filename).Msg("incoming request")
 
-		if r.Method == http.MethodGet {
-			defer func() {
-				wantFile := filepath.Join(htmlDir, "shadow.html")
-				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
-					w.WriteHeader(http.StatusNotFound)
-					log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
-					return
+			if r.Method == http.MethodGet {
+				defer func() {
+					wantFile := filepath.Join(htmlDir, "shadow.html")
+					if _, err := os.Stat(wantFile); os.IsNotExist(err) {
+						w.WriteHeader(http.StatusNotFound)
+						log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
+						return
+					}
+
+					w.Header().Set("Content-Type", "text/html; charset=UTF-8")
+					w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
+					http.ServeFile(w, r, wantFile)
+				}()
+
+				wantFile := cssDir + "home.css"
+				chatFilepath, _ := filepath.Abs(wantFile)
+
+				err := chef.PushFiles(w, chatFilepath)
+				if err != nil {
+					log.Error().Err(err).Msg("Error pushing files")
 				}
-
-				w.Header().Set("Content-Type", "text/html; charset=UTF-8")
-				w.Header().Set("Cache-Control", "max-age="+strconv.FormatInt(int64(cacheMaxAge), 10))
-				http.ServeFile(w, r, wantFile)
-			}()
-
-			wantFile := cssDir + "home.css"
-			chatFilepath, _ := filepath.Abs(wantFile)
-
-			err := chef.PushFiles(w, chatFilepath)
-			if err != nil {
-				log.Error().Err(err).Msg("Error pushing files")
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
 			}
-		} else {
-			w.WriteHeader(http.StatusBadRequest)
-			return
 		}
 	}
 }

@@ -33,9 +33,11 @@ func initCryptoAddr() {
 // DonateHandler handles an incoming donation request and serves back a page or the crypto address as JSON
 func DonateHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		currency := filepath.Base(r.URL.Path)
-		log.Debug().Str("Handler", "DonateHandler").Str("Currency", currency).Msg("incoming request")
-		w.Header().Set("Content-Type", "text/html; charset=utf-8") // normal header
-		fmt.Fprintf(w, "<h1>%v</h1>\n", cryptoAddr[currency])
+		if r != nil {
+			currency := filepath.Base(r.URL.Path)
+			log.Debug().Str("Handler", "DonateHandler").Str("Currency", currency).Msg("incoming request")
+			w.Header().Set("Content-Type", "text/html; charset=utf-8") // normal header
+			fmt.Fprintf(w, "<h1>%v</h1>\n", cryptoAddr[currency])
+		}
 	}
 }

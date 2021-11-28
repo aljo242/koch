@@ -17,7 +17,7 @@ func ChatHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 		// this page currently only serves html resources
 		log.Debug().Str("Handler", "ChatHomeHandler").Msg("incoming request")
 
-		if r.Method == http.MethodGet {
+		if r.Method == http.MethodGet && r != nil {
 			defer func() {
 				wantFile := filepath.Join(htmlDir, "chat.html")
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
