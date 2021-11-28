@@ -6,10 +6,7 @@ on:
   pull_request:
   push:
     branches:
-      - starport
-      - develop-no-stripe
-      - develop
-      - master
+      - main
 jobs:
   golangci:
     name: golangci-lint
