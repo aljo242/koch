@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <base href="{{.Host}}/"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Progressive Web app">
+
+    <meta name="theme-color" content="#f0f8ff"/>
+    <meta name="description" content="Home landing page for Alex Johnson.  Hosting my resume and some portfolio applications.  Author: Alex Johnson" />
+
+    <title>shmeeload</title>
+
+    <link rel="stylesheet" type="text/css"  href="{{.Host}}/static/css/home.css"/>
+    <link rel="manifest" href="{{.Host}}/manifest.json">
+    <link rel="shortcut icon" href="{{.Host}}/static/img/1favicon.ico" type="image/x-icon"/>
+    <link rel="apple-touch-icon" href="{{.Host}}/static/img/1apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="{{.Host}}/static/img/1apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="{{.Host}}/static/img/1apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{.Host}}/static/img/1apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="{{.Host}}/static/img/1apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="{{.Host}}/static/img/1apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="{{.Host}}/static/img/1apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="{{.Host}}/static/img/1apple-touch-icon-152x152.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{.Host}}/static/img/1apple-touch-icon-180x180.png"/>
+    
+    <script src="{{.Host}}/static/js/app.js" defer></script>
+
+</head>
+<body style="background-image: url('{{.Host}}/static/img/horse.jpg');">
+
+  <section class="scroll">
+    <nav id="nav">
+      <header id="header">alex johnson</header>
+      <ul>
+        <li class="navLink"><a  href="{{.Host}}/resume/home">resume</a></li>
+        <li class="navLink"><a  href="{{.Host}}/tunes/home">tunes</a></li>
+        <li class="navLink"><a  href="https://github.com/aljo242" target="_blank" rel="noopener noreferrer">github</a></li>
+        <li class="navLink"><a  href="{{.Host}}/chat/home">chat</a></li>
+        <li class="navLink"><a  href="{{.Host}}/hall-of-art/home">hall of art</a></li>
+        <li class="navLink"><a  href="{{.Host}}/shop/home">shoppers</a></li>
+      </ul>
+
+      <footer id="nav_footer">
+        <div id="copy">
+          &copy; shmeelabs
+        </div>
+        <div id="bonus_button">
+          <!--<button id="testHomeButton" style="float:center;">Click Me!</button>-->
+          <input width="100" height="100" type="image" id="secretButton" src="{{.Host}}/static/img/turbo_shadow_pixel_OG5.png" alt="shhhhh its a secret"/>
+        </div>
+      </footer>
+    </nav>
+
+    <article id="mainArticleBody">
+      <div id= "float_about_container">
+        <div id="about_me_section">
+          <div class="TextSubsection">
+            <p>Hi, welcome to my personal site. I’ve only been working on this for the past 2 months so please pardon any bugs! By developing the backend and frontend from scratch, I’ve been able to learn so much about Golang, TypeScript, efficient web-serving and application-layer protocols like HTTP and WebSockets.</p>
+            <p>Please enjoy exploring this site – there might even be some secrets.</p>
+          </div>
+          <h1 class="Header">about me</h1>
+          <div class="TextSubsection" i>
+            <p>I’m a 24-year-old software engineer who’s passionate about high-performance, efficient computing, peer-to-peer networking, web3 and cryptography. My previous work and research concentrated on high-performance networking for supercomputers, and I believe I can apply this performance-focused perspective to my future work.</p>
+            <p>My current goal is to contribute to the movement towards decentralized apps, currencies and protocols as I believe that they can provide a novel pathway for technologies to target currently unsolved problems as well as a unique lens to view old ones. Ultimately, I want my work to make the web more efficient, useful and a better place in general.</p>
+            <p>Hobbies I enjoy during my free time include finding/curating/making cool music, playing racquet ball or soccer, cooking and watching David Lynch movies.  I aim to host some of my music projects on here soon – so stay tuned.</p>
+            <p>Click on my resume to learn more about my work. 😊</p>
+          </div>
+        </div>
+        <div class="TextSubsection" id="me_img">
+          <img src="{{.Host}}/static/img/me.png" alt="picture of me">
+        </div>
+      </div>
+
+        <h1 class="Header">donate</h1>
+        <div id="donate" class="ListSubsection">
+            <ul class="Bullet">
+              <li class="textLink"><a href="{{.Host}}/donate/btc">btc</a> <a href="{{.Host}}/donate/ltc">ltc</a> <a href="{{.Host}}/donate/eth">eth</a> <a href="{{.Host}}/donate/ada">ada</a> </li>
+            </ul>
+        </div>
+      </article>
+    </section>
+</body>
+</html>

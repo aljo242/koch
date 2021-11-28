@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <base href="{{.Host}}/"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Progressive Web app">
+
+    <meta name="theme-color" content="#f0f8ff"/>
+    <meta name="description" content="Resume page for Alex Johnson.  Author: Alex Johnson">
+
+    <title>alex's resume</title>
+
+    <link rel='stylesheet' type='text/css'  href='{{.Host}}/static/css/resume.css'>
+    <link rel="manifest" href="{{.Host}}/manifest.json">
+    <link rel="shortcut icon" href="{{.Host}}/static/img/1favicon.ico" type="image/x-icon"/>
+    <link rel="apple-touch-icon" href="{{.Host}}/static/img/1apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="{{.Host}}/static/img/1apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="{{.Host}}/static/img/1apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{.Host}}/static/img/1apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="{{.Host}}/static/img/1apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="{{.Host}}/static/img/1apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="{{.Host}}/static/img/1apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="{{.Host}}/static/img/1apple-touch-icon-152x152.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{.Host}}/static/img/1apple-touch-icon-180x180.png"/>
+    
+    <script src="{{.Host}}/static/js/app.js" defer></script>
+</head>
+<body style="background-image: url('{{.Host}}/static/img/cactus.jpg'); background-size: cover;">
+    <section class= "scroll">
+      <nav id="nav">
+        <header id="header">alex's resume</header>
+        <ul>
+          <li class="navLink"><a href="{{.Host}}/files/alex_johnson_1page_resume.pdf" target="_blank">traditional resume</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_projects">projects</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_skills">skills</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_experience">experience</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_publications">publications</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_education">education</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_awards">awards & honors</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#links">links</a></li>
+          <li class="navLink"><a href="{{.Host}}/resume/home#sec_references">references</a></li>
+        </ul>
+
+        <footer id="nav_footer">
+            <div id="copy">
+              &copy; shmeelabs
+            </div>
+            <div id="bonus_button">
+              <!--<button id="testHomeButton" style="float:center;">Click Me!</button>-->
+              <input width="100" height="100" type="image" id="secretButton" src="{{.Host}}/static/img/turbo_shadow_pixel_OG5.png" alt="shhhhh its a secret"/>
+            </div>
+          </footer>
+      </nav>
+
+      <article  id="mainArticleBody">
+
+        <div id="sec_projects">
+            <h1 class="resumeHeader">projects</h1>
+            <div id="subsec_shmeeload.xyz" class="resumeTextSubsection">
+                <h2 class="resumeHeader">shmeeload.xyz</h2>
+                <p class="textLink">
+                    This website has been a large project for me to showcase some of my development skills.  I developed the full server backend from scratch in Go.  
+                    On the GitHub repository, you will find the project demonstrating some of my project management, CI and organizational skills.
+                    Before this, I didn't know anything about HTML, CSS, JavaScript or TypeScript, so this has also been a chance for me to gain some of those skills.
+                    I hope you like the look of the site.  A little bit of the old web look, a bit of my own touch.
+                </p>
+                <p class="textLink">
+                    For more information and source code, please check out my <a class="textLink" href="https://github.com/aljo242/shmeeload.xyz" target="_blank" rel="noopener noreferrer">repo</a>.
+                </p>
+            </div>
+
+            <div id="subsec_chef" class="resumeTextSubsection">
+                <h2 class="resumeHeader">chef library</h2>
+                <p class="textLink"> 
+                    This is a simple HTTP utility library that is used extentively for the backend of this website.  
+                    Demonstates some slick test-driven development and has extensive coverage for all use cases I will ever have.
+                    I plan on continuing to flesh this project out into a nice minimal HTTP backend library that hopefully someone other than just me can use.
+                    In designing this package, I've learned a lot about making extendable APIs/packages and creating development roadmaps for a more
+                    organized engineering workflow.
+                </p>
+                <p class="textLink">
+                    For more information and source code, please check out my <a class="textLink" href="https://github.com/aljo242/chef" target="_blank" rel="noopener noreferrer">repo</a>.
+                </p>
+            </div>
+
+            <div id="subsec_shmeechain" class="resumeTextSubsection">
+                <h2 class="resumeHeader">shmeechain and shmeecoin</h2>
+                <p class="textLink">
+                   Ongoing project for learning and implementing a public blockchain and crypto ecosystem.  I am planning to use <a class="textLink" href="ipns://libp2p.io/ rel="noopener noreferrer"" target="_blank">libp2p</a> 
+                   as the core of the project to learn more about their ecosystem and its available transports like QUIC.  I currently have a basic blockchain with a Bitcoin-style proof of work consensus
+                   mechanism with tuneable difficulty.  Current plans of the project are to fully flesh out the p2p networking stack so I can set up easily runnable nodes for my friends.
+                </p>
+                <p class="textLink">
+                    For more information and source code, please check out my <a class="textLink"  href="https://github.com/aljo242/crypt" target="_blank" rel="noopener noreferrer">repo</a>.
+                </p>
+            </div>
+
+            <div id="subsec_djinn" class="resumeTextSubsection">
+                <h2 class="resumeHeader">djinn 3D game engine</h2>
+                <p class="textLink">
+                    My ongoing game engine project.  Vulkan rendering engine with physically-based rendering, custom memory allocators, hardware accelerated ray-tracing, 
+                    editor and audio engine.  I've learned so much about GPU hardware, physics and high-performance allocations and threading on this project.  A main goal
+                    of the project has been to build a strong knowledge base in performant modern C++ (C++20), which can be seen with the engine's use of compile-time computation,
+                    concepts, and anonymous functions (lambdas).  I'm planning to merge this project with another Vulkan renderer from my colleague at <a  class="textLink"  href = "http://nsf-shrec.org/" target="_blank" rel="noopener noreferrer">NSF SHREC</a>,
+                    Bill Derksen (<a class="textLink"  href = "https://github.com/bderksen20" target="_blank" rel="noopener noreferrer">github</a>), so we can have an ongoing collaborative
+                    renderer project.  
+                </p>
+                <p class="textLink">
+                    For more information and source code, please check out my <a class="textLink"  href="https://github.com/aljo242/djinn" target="_blank" rel="noopener noreferrer">repo</a>.
+                </p>
+            </div>
+
+
+            <div id="subsec_algo" class="resumeTextSubsection">
+                <h2 class="resumeHeader">algorithms and data structures from scratch</h2>
+                <p class="textLink">
+                   My repo for algorithms and data structures from scratch.  Currently using Golang, but I want to try to expand to a variety of language as a learning exercise.
+                   I use this for training for coding interviews and practicing implementing design specifications.  The excercise of writing down
+                   the theory of how an data structure should work and implementing it without looking at any other code has helped me a lot in how to translate more complex ideas from paper to code.
+                </p>
+                <p class="textLink">
+                    For more information and source code, please check out my <a class="textLink"  href="https://github.com/aljo242/go-training" target="_blank" rel="noopener noreferrer">repo</a>.
+                </p>
+            </div>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_skills">
+            <h1 class="resumeHeader">skills</h1>
+            <div id="subsec_programming" class="resumeListSubsection">
+                <h2 class="resumeHeader">programming</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>Languages</em> (in order of experience): C++, C, Go, CUDA, Python, HTML/CSS, TypeScript, JavaScript, Shell, Haskell, GLSL, Matlab, Dlang, C#, OpenCL, Lua</li>
+                    <li class="resumeBullet"><em>APIs</em> (in order of experience): MPI, OpenSHMEM, OpenMP, Vulkan, OpenGL, PyTorch, TensorFlow</li>
+                </ul>
+            </div>
+
+            <div id="subsec_hwsw" class="resumeListSubsection">
+                <h2 class="resumeHeader">hardware / software</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>Hardware</em>: CPUs, HPC Interconnects (Infiniband, Aries, OmniPath), GPUs (Data-center and consumer), TPUs, FPGAs</li>
+                    <li class="resumeBullet"><em>Software</em>: Linux, Git, Windows, Altium Designer, Visual Studio, Simulink, NVIDIA Nsight, LTSPICE</li>
+                </ul>
+            </div>
+
+            <div id="subsec_knowledge_base" class="resumeListSubsection">
+                <h2 class="resumeHeader">knowledge bases</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>Distributed Systems</em>: blockchains, smart contracts, proof-of-work, proof-of-stake, leader election</li>
+                    <li class="resumeBullet"><em>Networking</em>: RPC, HTTP, TCP, UDP, QUIC, IBVerbs, RDMA</li>
+                    <li class="resumeBullet"><em>Machine Learning</em>: </li>
+                    <li class="resumeBullet"><em>Rendering</em>: physically-based rendering, ray-tracing, distributed offline rendering</li>
+                    <li class="resumeBullet"><em>Control</em>: adaptive control, PID, fuzzy logic, complex control</li>
+                </ul>
+            </div>
+
+            <div id="subsec_languages" class="resumeListSubsection">
+                <h2 class="resumeHeader">languages</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>German</em>: intermediate </li>
+                    <li class="resumeBullet"><em>Mandarin Chinese</em>: intermediate</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+           
+        <div id="sec_experience">
+            <h1 class="resumeHeader">experience</h1>
+            <div id="subsec_shrec" class="resumeListSubsection">
+                <h2 class="resumeHeader">Graduate Research Engineer</h2>
+                <h2 class="resumeHeader">NSF Center for Space, High-Performance and Resilient Computing (SHREC)</h2>
+                <h2 class="resumeHeader">August 2019 - April 2021</h2>
+                <ul class="resumeBulletSquare">
+                    <li class="resumeBulletSquare">Led and developed research plans for team of 3 graduate and 2 undergraduate
+                        researchers.</li>
+                    <li class="resumeBulletSquare">Provided code review and debugging support for all team members along with
+                        weekly internal meetings.</li>
+                    <li class="resumeBulletSquare">Developed novel benchmarks for evaluating communication scaling performance
+                        of supercomputers using up to 320 nodes.</li>
+                    <li class="resumeBulletSquare">Wrote grants to gain access to national supercomputers such as National
+                        Scientific Computing Center (NERSC) and Pittsburgh Supercomputing Center
+                        (PSC).</li>
+                    <li class="resumeBulletSquare">Analyzed inference performance of Convolutional Neural Networks (CNNs) on edge devices such as embedded TPUs.</li>
+                    <li class="resumeBulletSquare">Designed a CNN-based single-image-super-resolution model for on-Earth upscaling of low-resolution imagery sent from space.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resumeListtSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_publications">
+            <h1 class="resumeHeader">publications</h1>
+            <div id="subsec_openshmem_amj" class="resumeTextSubsection">
+               <p>
+                   <em>In progress:</em> <strong>A. Johnson</strong>, and A. D. George, <q>Performance and Productivity Evaluation of HPC Communicaiton Libraries and Programming Models,</q> 2021 OpenSHMEM Workshop, 2021.
+                </p>
+            </div>
+
+            <div id="subsec_hpec_kljucaric" class="resumeListSubsection">
+                <p>
+                    L. Kljucaric, <strong>A. Johnson</strong>, and A. D. George, <q>Architectural Analysis of Deep Learning on Edge Accelerators,</q> 2020 IEEE High Performance Extreme Computing Conferece (HPEC), 2020.
+                </p>
+             </div>
+
+            <div id="subsec_hpec_langerman" class="resumeListSubsection">
+                <p>
+                    D. Langerman, <strong>A. Johnson</strong>, K. Buettner and A. D. George, <q>Beyond Floating Point Ops: CNN Performance Prediction with Critical Datapath Length,</q> 2020 IEEE High Performance Extreme Computing Conferece (HPEC), 2020.
+                </p>
+            </div>
+
+            <div id="subsec_igsc_kline" class="resumeListSubsection">
+                <p>
+                    D. Kline, N. Parshook, <strong>A. Johnson</strong>, J. E. Stine, W. Stanchina, and A. K. Jones, <q>Sustainable IC design and fabrication,</q> 2017 Eighth International Green and Sustainable Computing Conference (IGSC), 2017.
+                </p>
+             </div>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_education">
+            <h1 class="resumeHeader">education</h1>
+            <div id="subsec_ms" class="resumeListSubsection">
+                <h2 class="resumeHeader">M.S. in Electrical and Computer Engineering, University of Pittsburgh</h2>
+                <h2 class="resumeHeader">August 2019 - April 2021</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>Swanson School of Engineering</em></li>
+                    <li class="resumeBullet"><em>GPA</em>: 3.969</li>
+                </ul>
+            </div>
+
+            <div id="subsec_bs" class="resumeListSubsection">
+                <h2 class="resumeHeader">B.S. in Electrical and Computer Engineering, University of Pittsburgh</h2>
+                <h2 class="resumeHeader">August 2015 - April 2019</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet"><em>Swanson School of Engineering</em></li>
+                    <li class="resumeBullet"><em>GPA</em>: 3.741</li>
+                    <li class="resumeBullet"><em>Summa Cum Laude</em></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_awards">
+            <h1 class="resumeHeader">awards & honors</h1>
+            <div id="subsec_grad_award" class="resumeListSubsection">
+                <h2 class="resumeHeader">Outstanding Graduate in Electrical Engineering</h2>
+                <h2 class="resumeHeader">August 2019</h2>
+                <ul class="resumeBullet">
+                    <li class="resumeBullet">Awarded to the top Electrical Engineering student in Pitt's Class of 2019</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_links" class="resumeListSubsection">
+            <h1 class="resumeHeader">links</h1>
+                <ul class="textLink">
+                    <li><a href="mailto:alex.johnson@shmeeload.xyz">email</a></li>
+                    <li><a href="https://github.com/aljo242" target="_blank">github</a></li>
+                    <li><a href="https://www.linkedin.com/in/alex-johnson-776180111/" target="_blank">linkedin</a></li>
+                </ul>
+        </div>
+
+        <div class="resumeListSubsection">
+            <hr class="style-two">
+        </div>
+
+        <div id="sec_references" class="resumeListSubsection">
+            <h1 class="resumeHeader">references</h1>
+                <ul>
+                <div id="subsec_adg">
+                    <p>Alan D. George, Ph.D.</p>
+                    <p><em>Department Chair, R&H Mickle Endowed Chair, and Professor of Electrical and Computer Engineering</em></p>
+                    <p class="textLink" ><a href="mailto:alan.george@pitt.edu ">email</a></p>
+                    <p>412.624.9664</p>
+                    <br>
+                </div>
+
+                <div id="subsec_zhm">
+                    <p>Zhi-Hong Mao, Ph.D.</p>
+                    <p><em>Professor of Electrical and Computer Engineering</em></p>
+                    <p class="textLink" ><a href="mailto:maozh@engr.pitt.edu">email</a></p>
+                    <p>412.624.9674</p>
+                    <br>
+                </div>
+
+                <div id="subsec_ahd">
+                    <p>Ahmed Dallal, Ph.D.</p>
+                    <p><em>Assistant Professor of Electrical and Computer Engineering</em></p>
+                    <p class="textLink" ><a href="mailto:ahd12@pitt.edu ">email</a></p>
+                    <p>412.383.4423</p>
+                    <br>
+                </div>
+        </div>
+      </article>
+    </section>
+</body>
+</html>

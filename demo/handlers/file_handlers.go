@@ -6,18 +6,19 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/aljo242/koch/util/file_util"
 	"github.com/rs/zerolog/log"
 )
 
 const (
-	htmlDir      string = "./static/html/"
-	jsDir        string = "./static/js/"
-	cssDir       string = "./static/css/"
-	tsDir        string = "./static/src/"
-	imgDir       string = "./static/img/"
-	modelDir     string = "./static/model/"
-	miscFilesDir string = "./static/files"
-	rootDir      string = "./"
+	htmlDir      string = "html/"
+	jsDir        string = "js/"
+	cssDir       string = "css/"
+	tsDir        string = "src/"
+	imgDir       string = "img/"
+	modelDir     string = "model/"
+	miscFilesDir string = "files"
+	rootDir      string = "/"
 )
 
 // ScriptsHandler takes a script name and
@@ -27,7 +28,8 @@ func ScriptsHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			filename := filepath.Base(r.URL.Path)
 			log.Debug().Str("Handler", "ScriptsHandler").Str("Filename", filename).Msg("incoming request")
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(jsDir, filename)
+				dir := filepath.Join(file_util.OutputDir, jsDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -61,7 +63,8 @@ func CSSHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			log.Debug().Str("Handler", "CSSHandler").Str("Filename", filename).Msg("incoming request")
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(cssDir, filename)
+				dir := filepath.Join(file_util.OutputDir, cssDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -88,7 +91,8 @@ func HTMLHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			log.Debug().Str("Handler", "HTMLHandler").Str("Filename", filename).Msg("incoming request")
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(htmlDir, filename)
+				dir := filepath.Join(file_util.OutputDir, htmlDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -115,7 +119,8 @@ func TypeScriptHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request)
 			log.Debug().Str("Handler", "TypeScriptHandler").Str("Filename", filename).Msg("incoming request")
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(tsDir, filename)
+				dir := filepath.Join(file_util.OutputDir, tsDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -142,7 +147,8 @@ func ManifestHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 
 			if r.Method == http.MethodGet {
 				log.Debug().Str("Handler", "ManifestHandler").Str("Filename", filename).Msg("incoming request")
-				wantFile := filepath.Join(rootDir, filename)
+				dir := filepath.Join(file_util.OutputDir, rootDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -169,7 +175,8 @@ func ServiceWorkerHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Reque
 
 			if r.Method == http.MethodGet {
 				log.Debug().Str("Handler", "ServiceWorkerHandler").Str("Filename", filename).Msg("incoming request")
-				wantFile := filepath.Join(rootDir, filename)
+				dir := filepath.Join(file_util.OutputDir, rootDir)
+				wantFile := filepath.Join(dir, filename)
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Debug().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -199,7 +206,8 @@ func ImageHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			filename := filepath.Base(r.URL.Path)
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(imgDir, filename)
+				dir := filepath.Join(file_util.OutputDir, imgDir)
+				wantFile := filepath.Join(dir, filename)
 				log.Debug().Str("Handler", "ImageHandler").Str("Filename", wantFile).Msg("incoming request")
 
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
@@ -236,7 +244,8 @@ func ModelHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			filename := filepath.Base(r.URL.Path)
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(modelDir, filename)
+				dir := filepath.Join(file_util.OutputDir, modelDir)
+				wantFile := filepath.Join(dir, filename)
 				log.Debug().Str("Handler", "ModelHandler").Str("Filename", wantFile).Msg("incoming request")
 
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
@@ -271,7 +280,8 @@ func MiscFileHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 			filename := filepath.Base(r.URL.Path)
 
 			if r.Method == http.MethodGet {
-				wantFile := filepath.Join(miscFilesDir, filename)
+				dir := filepath.Join(file_util.OutputDir, miscFilesDir)
+				wantFile := filepath.Join(dir, filename)
 				log.Debug().Str("Handler", "MiscFileHandler").Str("requested file", filename).Msg("incoming request")
 
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {

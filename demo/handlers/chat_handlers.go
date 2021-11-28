@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/aljo242/chef"
+	"github.com/aljo242/koch/util/file_util"
 	"github.com/rs/zerolog/log"
 )
 
@@ -19,7 +19,8 @@ func ChatHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 
 		if r.Method == http.MethodGet && r != nil {
 			defer func() {
-				wantFile := filepath.Join(htmlDir, "chat.html")
+				dir := filepath.Join(file_util.OutputDir, htmlDir)
+				wantFile := filepath.Join(dir, "chat.html")
 				if _, err := os.Stat(wantFile); os.IsNotExist(err) {
 					w.WriteHeader(http.StatusNotFound)
 					log.Fatal().Err(err).Str("Filename", wantFile).Msg("Error finding file")
@@ -31,14 +32,6 @@ func ChatHomeHandler(cacheMaxAge int) func(http.ResponseWriter, *http.Request) {
 				http.ServeFile(w, r, wantFile)
 			}()
 
-			wantFile := cssDir + "chat.css"
-			chatFilepath, _ := filepath.Abs(wantFile)
-			wantFile = jsDir + "chat.js"
-			jsFilepath, _ := filepath.Abs(wantFile)
-			err := chef.PushFiles(w, chatFilepath, jsFilepath)
-			if err != nil {
-				log.Error().Err(err).Msg("Error pushing files")
-			}
 		} else {
 			w.WriteHeader(http.StatusBadRequest)
 			return

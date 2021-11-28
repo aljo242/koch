@@ -6,7 +6,10 @@ COMMIT := $(shell git log -1 --format='%H')
 PROJECT_NAME = $(shell git remote get-url origin | xargs basename -s .git)
 ARTIFACT_DIR := ./artifacts
 BINDIR ?= $(GOPATH)/bin
-DEMOAPP = ./demo/kochd
+DEMODIR := ./demo
+DAEMON := kochd
+DEMOAPP := $(DEMODIR)/$(DAEMON)
+KOCHDIR := ${HOME}/.koch
 
 export GO111MODULE = on
 
@@ -19,6 +22,16 @@ all: install lint test
 install: go.sum
 	@echo "--> Installing kochd"
 	@go install -mod=readonly $(BUILD_FLAGS) $(DEMOAPP)
+
+	@echo "--> Typescipt compilation"
+	@cd $(DEMODIR)/res && tsc
+
+# install config and data into ~/.koch folder
+	@echo "--> Installing sample config into $(KOCHDIR)"
+	@mkdir -p $(KOCHDIR)
+	@cp -R $(DEMODIR)/config $(KOCHDIR)
+	@cp -R $(DEMODIR)/res $(KOCHDIR)
+
 
 build: go.sum
 	@echo "--> Building kochd"
@@ -65,8 +78,6 @@ containerMarkdownLintFix=$(PROJECT_NAME)-markdownlint-fix
 
 lint:
 	@golangci-lint run -c ./.golangci.yml --out-format=tab --issues-exit-code=0
-	@# @if $(DOCKER) ps -a --format '{{.Names}}' | grep -Eq "^${containerMarkdownLint}$$"; then $(DOCKER) start -a $(containerMarkdownLint); else $(DOCKER) run --name $(containerMarkdownLint) -i -v "$(CURDIR):/work" $(markdownLintImage); fi
-
 
 FIND_ARGS := -name '*.go' -type f -not -path "./sample_txs*" -not -path "*.git*" -not -path "./build_report/*" -not -path "./scripts*" -not -name '*.pb.go'
 

@@ -1,0 +1,23 @@
+{
+  "name": "web_res",
+  "version": "1.0.0",
+  "description": "web resources for shmeeload.xyz",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "html",
+    "javascript",
+    "websockets"
+  ],
+  "author": "Cozart Shmoopler",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "tsc": "^1.20150623.0"
+  }
+}

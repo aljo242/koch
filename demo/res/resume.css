@@ -1,0 +1,284 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #101010;  
+
+    /*background-color: rgb(203, 224, 231); */
+
+    position: fixed;
+    width: 99%;
+    height: 99%;
+}
+
+/* Gradient color1 - color2 - color1 */
+
+hr.style-one {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+    text-align: center;
+    width: 90%;
+
+}
+
+/* Gradient transparent - color - transparent */
+hr.style-two {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    text-align: center;
+    width: 90%;
+
+}
+
+/* Inset, by Dan Eden */
+
+hr.style-six {
+    border: 0;
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    text-align: center;
+    width: 90%;
+}
+
+hr.style2 {
+	border-top: 3px double #8c8b8b;
+    text-align: center;
+    width: 90%;
+}
+
+hr.style3 {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
+  
+
+/* style for the header */
+#header {
+    background: #ffc0cb;
+
+    /*padding: 30px;*/
+    text-align: center;
+    font-size: 30px;
+}
+
+/*
+    create two columns/boxes that float next to each other
+*/
+#nav {
+    float: left;
+    /* width: 10%; */
+    min-height: 100vh; 
+    min-width: fit-content;
+    position: fixed;
+    background: #adff2f;
+    text-align: center;
+    z-index: 1;
+}
+
+/*
+    xstyle the list inside the nav menu
+*/ 
+ul {
+    list-style-type: none;
+}
+
+nav ul {
+    text-align: left;
+}
+
+nav li {
+    padding-top: 4vh;
+    display: block;
+}
+
+.scroll {
+    height: 100%;
+    overflow-y:scroll; 
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.scroll::-webkit-scrollbar {
+    display: none;
+}
+
+article {
+    position: relative;
+}
+
+#mainArticleBody {
+    float: right;
+    text-align: center;
+    /* padding: 20px; */
+   /*  width: 90%; */
+    padding-left: 10px;
+    max-width: 70%;
+    background-color: #f0e68c;
+    overflow-x: hidden;
+
+}
+
+#mainArticleBody h2 {
+    font-size: medium;
+}
+
+
+#mainArticleBody ul {
+    text-align: center;
+}
+
+#mainArticleBody li {
+    padding: 0;
+    margin: 0;
+}
+
+#bonus_button {
+    padding-top: 0px;
+}
+
+
+
+/* clear floats after the columns */
+section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* style the footer */
+#nav_footer {
+    padding-top: 10vh;
+}
+
+/* 
+    Responsive layout -makes two columns/boxes stack on top of each other instead of
+    next to eac hother on small screens
+*/
+@media (max-width: 600px) {
+    #nav, #mainArticleBody {
+        width: 100%;
+        height: auto;
+        float: none;
+        max-width: 95%;
+        min-height: min-content;
+    }
+
+    #nav {
+        position: relative;
+        margin-bottom: 5px;
+    }
+
+    #mainArticleBody {
+        margin-top: 5px;
+    }
+
+}
+
+.navLink a:link {
+    color: #f700ff;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.navLink a:visited {
+    color: #f700ff;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.navLink k a:hover {
+    color: #ffd038;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.navLink a:active {
+    color: #ffff00;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+.textLink a:link {
+    color: rgb(247, 0, 255);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.textLink a:visited {
+    color: rgb(247, 0, 255);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.textLink a:hover {
+    color: rgb(255, 208, 56);
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.textLink a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+.resumeTextSubsection {
+    padding: 25px 50px;
+    text-align: left;
+}
+
+.resumeListSubsection {
+    padding: 25px 50px;
+    text-align: left;
+}
+
+ul.resumeBullet {
+    list-style-type: none;
+    display: inline-block;
+}
+
+
+li.resumeBullet {
+    padding-left: 10px;
+    padding-bottom: 1px;
+    text-align: left;
+}
+
+ul.resumeBulletSquare {
+    list-style-type: square;
+    display: inline-block;
+}
+
+
+li.resumeBulletSquare {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    text-align: left;
+}
+
+
+.resumeHeader {
+    text-align: left;
+}
+
+h1.resumeHeader {
+    font-size: 120%;
+    padding-left: 50px;
+}
+
+h2.resumeHeader {
+    font-size: 100%;
+    padding-left: 50px;
+}

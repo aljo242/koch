@@ -9,6 +9,30 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const dirName = ".koch"
+
+var KochDir string
+var ConfigFile string
+var BaseDir string
+var OutputDir string
+
+func init() {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+
+	KochDir = filepath.Join(home, dirName)
+	err = EnsureDir(KochDir)
+	if err != nil {
+		log.Fatal().Msg(err.Error())
+	}
+
+	ConfigFile = filepath.Join(KochDir, "config/config.json")
+	BaseDir = filepath.Join(KochDir, "res")
+	OutputDir = filepath.Join(KochDir, "static")
+}
+
 // Exists is a basic file util that says if a dir or file exists
 func Exists(path string) bool {
 	_, err := os.Stat(path)

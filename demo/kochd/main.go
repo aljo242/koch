@@ -18,22 +18,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const (
-	// DefaultConfigFile is the name of the user's config JSON file
-	DefaultConfigFile string = "sample/sample_config.json"
-
-	// TemplateBaseDir is where HTML template files are located to be
-	// executed and copied to the res dir
-	TemplateBaseDir string = "./web_res"
-
-	// TemplateOutputDir is the directory all outputs of SetupTemplates will fall under
-	TemplateOutputDir string = "./static"
-)
-
 var configFile string
 
 func init() {
-	flag.StringVar(&configFile, "c", DefaultConfigFile, "Full path to JSON configuration file")
+	flag.StringVar(&configFile, "c", file_util.ConfigFile, "Full path to JSON configuration file")
+
 }
 
 func setupLogger(cfg server.Config) {
@@ -55,63 +44,63 @@ func SetupTemplates(cfg server.Config) ([]string, error) {
 
 	log.Debug().Msg("cleaning output directory")
 	// clean static output dir
-	err := os.RemoveAll(TemplateOutputDir)
+	err := os.RemoveAll(file_util.OutputDir)
 	if err != nil {
 		return nil,
-			fmt.Errorf("error cleaning output directory %v : %w", TemplateOutputDir, err)
+			fmt.Errorf("error cleaning output directory %v : %w", file_util.OutputDir, err)
 	}
 
-	log.Debug().Str("OutputDir", TemplateOutputDir).Msg("creating new output directories")
+	log.Debug().Str("OutputDir", file_util.OutputDir).Msg("creating new output directories")
 	// Create/ensure output directory
-	if err = file_util.EnsureDir(TemplateOutputDir); err != nil {
+	if err = file_util.EnsureDir(file_util.OutputDir); err != nil {
 		return nil, err
 	}
 
 	// Create subdirs
-	htmlOutputDir := filepath.Join(TemplateOutputDir, "html")
+	htmlOutputDir := filepath.Join(file_util.OutputDir, "html")
 	if err = file_util.EnsureDir(htmlOutputDir); err != nil {
 		return nil, err
 	}
 
-	jsOutputDir := filepath.Join(TemplateOutputDir, "js")
+	jsOutputDir := filepath.Join(file_util.OutputDir, "js")
 	if err = file_util.EnsureDir(jsOutputDir); err != nil {
 		return nil, err
 	}
 
-	cssOutputDir := filepath.Join(TemplateOutputDir, "css")
+	cssOutputDir := filepath.Join(file_util.OutputDir, "css")
 	if err = file_util.EnsureDir(cssOutputDir); err != nil {
 		return nil, err
 	}
 
-	tsOutputDir := filepath.Join(TemplateOutputDir, "src")
+	tsOutputDir := filepath.Join(file_util.OutputDir, "src")
 	if err = file_util.EnsureDir(tsOutputDir); err != nil {
 		return nil, err
 	}
 
-	imgOutputDir := filepath.Join(TemplateOutputDir, "img")
+	imgOutputDir := filepath.Join(file_util.OutputDir, "img")
 	if err = file_util.EnsureDir(imgOutputDir); err != nil {
 		return nil, err
 	}
 
-	modelOutputDir := filepath.Join(TemplateOutputDir, "model")
+	modelOutputDir := filepath.Join(file_util.OutputDir, "model")
 	if err = file_util.EnsureDir(modelOutputDir); err != nil {
 		return nil, err
 	}
 
-	miscFilesOutputDir := filepath.Join(TemplateOutputDir, "files")
+	miscFilesOutputDir := filepath.Join(file_util.OutputDir, "files")
 	if err = file_util.EnsureDir(miscFilesOutputDir); err != nil {
 		return nil, err
 	}
 
-	log.Debug().Str("BaseDir", TemplateBaseDir).Msg("ensuring template base directory exists")
+	log.Debug().Str("BaseDir", file_util.BaseDir).Msg("ensuring template base directory exists")
 	// Ensure base template directory exists
-	if !file_util.Exists(TemplateBaseDir) {
+	if !file_util.Exists(file_util.BaseDir) {
 		return nil,
-			fmt.Errorf("base Dir %v does not exist", TemplateBaseDir)
+			fmt.Errorf("base Dir %v does not exist", file_util.BaseDir)
 	}
 
 	// walk through all files in the template resource dir
-	err = filepath.Walk(TemplateBaseDir,
+	err = filepath.Walk(file_util.BaseDir,
 		func(path string, info os.FileInfo, err error) error {
 			// skip certain directories
 			if info.IsDir() && info.Name() == "node_modules" {
@@ -168,7 +157,7 @@ func SetupTemplates(cfg server.Config) ([]string, error) {
 		})
 	if err != nil {
 		return nil,
-			fmt.Errorf("error walking %v : %w", TemplateBaseDir, err)
+			fmt.Errorf("error walking %v : %w", file_util.BaseDir, err)
 	}
 
 	log.Debug().Msg("template setup complete.")

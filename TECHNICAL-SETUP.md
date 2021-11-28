@@ -12,6 +12,12 @@ This installation method removes existing Go installations, installs Go in `/usr
 
 **Note:** We recommend not using brew to install Go.
 
+## Install Typescript
+
+If using JavaScript for web services, `koch` recommends and expects users to write their files in TypeScript for better safety.
+
+To install the `tsc` transpiler, please follow the official [TypeScript instructions](https://www.typescriptlang.org/download).
+
 ## Install Git pre-commit Hook
 
 Git `pre-commit` hooks run before any commit to the Git repository. These hooks verify that each commit passes basic formatting and linting checks.
