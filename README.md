@@ -12,6 +12,4 @@ Server backend written using Go and the gorilla/mux and gorilla/websockets packa
 
 * HTTPS supported
 * TypeScript -> JavaScript pipeline for browser scripting
-* WebSockets for shmeechat
-* uses my chef repo for major functionality (https://github.com/aljo242/chef.git)
-
+* WebSockets for x/chat module
