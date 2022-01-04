@@ -85,8 +85,4 @@ format:
 	@find . $(FIND_ARGS) | xargs gofmt -w -s
 	@find . $(FIND_ARGS) | xargs goimports -w -local github.com/Pylons-tech/pylons
 
-proto-lint:
-	@buf lint --error-format=json
-
-
 .PHONY: lint format
