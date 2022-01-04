@@ -35,7 +35,7 @@ install: go.sum
 
 build: go.sum
 	@echo "--> Building kochd"
-	@go build -o $(ARTIFACT_DIR)/pylonsd -mod=readonly $(BUILD_FLAGS) $(DEMOAPP)
+	@go build -o $(ARTIFACT_DIR)/$(DAEMON) -mod=readonly $(BUILD_FLAGS) $(DEMOAPP)
 
 clean:
 	@rm -rf $(ARTIFACT_DIR)
