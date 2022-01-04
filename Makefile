@@ -83,6 +83,6 @@ FIND_ARGS := -name '*.go' -type f -not -path "./sample_txs*" -not -path "*.git*"
 
 format:
 	@find . $(FIND_ARGS) | xargs gofmt -w -s
-	@find . $(FIND_ARGS) | xargs goimports -w -local github.com/Pylons-tech/pylons
+	@find . $(FIND_ARGS) | xargs goimports -w -local github.com/aljo242/koch
 
 .PHONY: lint format
