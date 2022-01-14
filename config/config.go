@@ -8,7 +8,28 @@ import (
 	"path/filepath"
 
 	"github.com/rs/zerolog/log"
+	"github.com/spf13/viper"
 )
+
+const (
+	defaultConfigPath = "$HOME/.koch/config/"
+)
+
+func New() {
+	viper.SetConfigName("config")
+	viper.SetConfigType("toml")
+	viper.AddConfigPath(defaultConfigPath)
+	err := viper.ReadInConfig()
+
+	// if no config file, write default to default cfg path
+	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+		// default config
+		viper.SafeWriteConfigAs(defaultConfigPath) // write current config to path
+	} else {
+		panic(fmt.Errorf("fatal error config file %w", err))
+	}
+
+}
 
 // Config is the general struct holds parsed JSON config info
 type Config struct {

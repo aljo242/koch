@@ -27,10 +27,10 @@ install: go.sum
 	@cd $(DEMODIR)/res && tsc
 
 # install config and data into ~/.koch folder
-	@echo "--> Installing sample config into $(KOCHDIR)"
-	@mkdir -p $(KOCHDIR)
-	@cp -R $(DEMODIR)/config $(KOCHDIR)
-	@cp -R $(DEMODIR)/res $(KOCHDIR)
+# 	@echo "--> Installing sample config into $(KOCHDIR)"
+#	@mkdir -p $(KOCHDIR)
+#	@cp -R $(DEMODIR)/config $(KOCHDIR)
+#	@cp -R $(DEMODIR)/res $(KOCHDIR)
 
 
 build: go.sum
