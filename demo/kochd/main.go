@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aljo242/koch/config"
 	"github.com/aljo242/koch/demo/handlers"
 	"github.com/aljo242/koch/server"
 	"github.com/aljo242/koch/template"
@@ -25,7 +26,7 @@ func init() {
 
 }
 
-func setupLogger(cfg server.Config) {
+func setupLogger(cfg config.Config) {
 	if cfg.DebugLog {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		log.Debug().Msg("log level is DEBUG")
@@ -38,7 +39,7 @@ func setupLogger(cfg server.Config) {
 
 // SetupTemplates builds the template output directory, executes HTML templates,
 // and copies all web resource files to the template output directory (.js, .ts, .js.map, .css, .html)
-func SetupTemplates(cfg server.Config) ([]string, error) {
+func SetupTemplates(cfg config.Config) ([]string, error) {
 	files := make([]string, 0)
 	log.Debug().Msg("setting up templates")
 
@@ -166,7 +167,7 @@ func SetupTemplates(cfg server.Config) ([]string, error) {
 
 func initServer() *server.Server {
 	log.Printf("loading configuration in file: %v", configFile)
-	cfg, err := server.LoadConfig(configFile)
+	cfg, err := config.LoadConfig(configFile)
 	if err != nil {
 		log.Fatal().Err(err).Msg("error loading config")
 		return nil

@@ -12,6 +12,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/aljo242/koch/config"
+
 	"github.com/gorilla/mux"
 
 	"github.com/rs/zerolog/log"
@@ -20,7 +22,7 @@ import (
 // Server ...
 type Server struct {
 	http.Server
-	config    Config
+	config    config.Config
 	wg        *sync.WaitGroup
 	quit      chan struct{}
 	isRunning bool
@@ -31,7 +33,7 @@ func serverShutdownCallback() {
 	log.Printf("shutting down server...")
 }
 
-func getTLSConfig(cfg Config) (*tls.Config, error) {
+func getTLSConfig(cfg config.Config) (*tls.Config, error) {
 
 	cer, err := tls.LoadX509KeyPair(cfg.CertFile, cfg.KeyFile)
 	if err != nil {
@@ -64,7 +66,7 @@ func getTLSConfig(cfg Config) (*tls.Config, error) {
 }
 
 // NewServer ...
-func NewServer(cfg Config, r *mux.Router) *Server {
+func NewServer(cfg config.Config, r *mux.Router) *Server {
 	tlsCfg := &tls.Config{MinVersion: tls.VersionTLS12}
 	addr := cfg.IP + ":" + cfg.Port
 

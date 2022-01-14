@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/aljo242/koch/server"
+	"github.com/aljo242/koch/config"
 	"github.com/rs/zerolog/log"
 )
 
@@ -17,7 +17,7 @@ type InfoHTML struct {
 
 // ExecuteTemplateHTML is a util func for executing an html template
 // at path and saving the new file to newPath
-func ExecuteTemplateHTML(cfg server.Config, path, newPath string) error {
+func ExecuteTemplateHTML(cfg config.Config, path, newPath string) error {
 	filePath := filepath.Clean(newPath)
 	newFile, err := os.Create(filePath)
 	if err != nil {

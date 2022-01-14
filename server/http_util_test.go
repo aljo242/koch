@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aljo242/koch/config"
 	"github.com/stretchr/testify/require"
 
 	"github.com/gorilla/mux"
@@ -58,7 +59,7 @@ func TestMain(m *testing.M) {
 
 	runningChan := make(chan struct{})
 
-	cfg, err := LoadConfig(sampleConfigFile)
+	cfg, err := config.LoadConfig(sampleConfigFile)
 	if err != nil {
 		os.Exit(-1)
 	}
@@ -101,16 +102,16 @@ func TestMain(m *testing.M) {
 
 func TestConfig(t *testing.T) {
 	// provide nonexistent file to get incorrect file error
-	_, err := LoadConfig(incorrectConfigFile)
+	_, err := config.LoadConfig(incorrectConfigFile)
 	require.ErrorIs(t, err, os.ErrNotExist)
 
-	_, err = LoadConfig(sampleHTML)
-	require.ErrorIs(t, err, ErrConfigNotJSON)
+	_, err = config.LoadConfig(sampleHTML)
+	require.ErrorIs(t, err, config.ErrConfigNotJSON)
 }
 
 func TestTLSConfig(t *testing.T) {
 	// test loading default config with no TLS
-	cfg, err := LoadConfig(sampleConfigFile)
+	cfg, err := config.LoadConfig(sampleConfigFile)
 	if err != nil {
 		t.Error(err)
 	}
@@ -124,7 +125,7 @@ func TestTLSConfig(t *testing.T) {
 	///////////////////////////////////////////////////////////////
 
 	// test loading default config with  TLS
-	cfg, err = LoadConfig(sampleConfigFileTLS)
+	cfg, err = config.LoadConfig(sampleConfigFileTLS)
 	require.NoError(t, err)
 
 	f, err := os.Open(cfg.KeyFile)
@@ -144,7 +145,7 @@ func TestTLSConfig(t *testing.T) {
 	// test loading default config with TLS but no root CA specified
 
 	// test loading default config with  TLS
-	cfg, err = LoadConfig(sampleConfigFileNoRootTLS)
+	cfg, err = config.LoadConfig(sampleConfigFileNoRootTLS)
 	require.NoError(t, err)
 }
 
