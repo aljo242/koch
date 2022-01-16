@@ -6,8 +6,9 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/aljo242/koch/util/file_util"
 	"github.com/rs/zerolog/log"
+
+	"github.com/aljo242/koch/util/file_util"
 )
 
 // RedirectHome redirects to the {HOST}/home url with a 301 status

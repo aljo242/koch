@@ -11,17 +11,20 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/aljo242/koch/config"
+
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	sampleConfigFile          = "./sample/sample_config.json"
-	sampleConfigFileTLS       = "./sample/sample_config_tls.json"
-	sampleConfigFileNoRootTLS = "./sample/sample_config_tls_no_root.json"
-	sampleHTML                = "./sample/test.html"
-	incorrectConfigFile       = "incorrect.wrong"
+	sampleConfigFile    = "../config/sample/"
+	sampleHTML          = "./sample/test.html"
+	incorrectConfigFile = "incorrect.wrong"
+	sampleCert          = "./sample/localhost.crt"
+	sampleKey           = "./sample/localhost.key"
+	sampleRoot          = "./sample/rootCA.crt"
 )
 
 var (
@@ -58,9 +61,11 @@ func TestMain(m *testing.M) {
 
 	runningChan := make(chan struct{})
 
-	cfg, err := LoadConfig(sampleConfigFile)
+	fmt.Println(os.Getwd())
+
+	err := config.New(sampleConfigFile)
 	if err != nil {
-		os.Exit(-1)
+		panic(err)
 	}
 
 	r := mux.NewRouter()
@@ -69,7 +74,19 @@ func TestMain(m *testing.M) {
 	r.HandleFunc("/invalid", invalidHandler)
 	r.HandleFunc("/pushAttempt", pushAttemptHandler)
 
-	srv := NewServer(cfg, r)
+	srv, err := NewServer(config.ServerSecure(),
+		config.ServerIP(),
+		config.ServerPort(),
+		config.ServerCertFile(),
+		config.ServerKeyFile(),
+		config.ServerRootCA(),
+		config.ServerHost(),
+		config.ServerShutdownCode(),
+		config.ServerCmdEnable(), r)
+
+	if err != nil {
+		panic(err)
+	}
 	go func(ch chan struct{}) {
 		srv.Run(ch)
 	}(runningChan)
@@ -99,53 +116,36 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
-func TestConfig(t *testing.T) {
-	// provide nonexistent file to get incorrect file error
-	_, err := LoadConfig(incorrectConfigFile)
-	require.ErrorIs(t, err, os.ErrNotExist)
-
-	_, err = LoadConfig(sampleHTML)
-	require.ErrorIs(t, err, ErrConfigNotJSON)
-}
-
 func TestTLSConfig(t *testing.T) {
 	// test loading default config with no TLS
-	cfg, err := LoadConfig(sampleConfigFile)
-	if err != nil {
-		t.Error(err)
-	}
+	err := config.New(sampleConfigFile)
+	require.NoError(t, err)
 
 	// will throw error since no key pair is not present in config
-	_, err = getTLSConfig(cfg)
+	_, err = newTLSConfig(config.ServerCertFile(), config.ServerKeyFile(), config.ServerRootCA())
 	if err != os.ErrNotExist { // should be returned if no PEM files found in getTLSConfig
 		t.Error(err)
 	}
 
-	///////////////////////////////////////////////////////////////
-
 	// test loading default config with  TLS
-	cfg, err = LoadConfig(sampleConfigFileTLS)
+	f, err := os.Open(sampleCert)
+	require.NoError(t, err)
+	err = f.Close()
 	require.NoError(t, err)
 
-	f, err := os.Open(cfg.KeyFile)
+	f, err = os.Open(sampleKey)
 	require.NoError(t, err)
-	f.Close()
-
-	f, err = os.Open(cfg.CertFile)
-	require.NoError(t, err)
-	f.Close()
-
-	_, err = tls.LoadX509KeyPair(cfg.CertFile, cfg.KeyFile)
+	err = f.Close()
 	require.NoError(t, err)
 
-	_, err = getTLSConfig(cfg)
+	_, err = tls.LoadX509KeyPair(sampleCert, sampleKey)
+	require.NoError(t, err)
+
+	_, err = newTLSConfig(sampleCert, sampleKey, sampleRoot)
 	require.NoError(t, err)
 
 	// test loading default config with TLS but no root CA specified
 
-	// test loading default config with  TLS
-	cfg, err = LoadConfig(sampleConfigFileNoRootTLS)
-	require.NoError(t, err)
 }
 
 func TestValidGetRequest(t *testing.T) {

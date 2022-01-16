@@ -1,0 +1,36 @@
+# Koch sample application configuration
+
+app = "myApp"
+
+# add desc
+[owner]
+name = "cozart shmoopler"
+# add content
+
+# add desc
+[database]
+# add content
+
+# add desc
+[logger]
+level = "debug"
+
+# add desc
+[server]
+host = "localhost"
+port = "80"
+IP = "localhost"
+chooseIP = false
+secure = false
+debugLog = true
+cmdEnable = false
+certFile = "" # no cert 
+keyFile = "" # no key
+rootCA = "" # no root
+cacheMaxAge = 180
+shutdownCode = -3
+# add content
+
+# add desc
+[modules]
+# add content

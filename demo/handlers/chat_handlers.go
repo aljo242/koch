@@ -6,8 +6,9 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/aljo242/koch/util/file_util"
 	"github.com/rs/zerolog/log"
+
+	"github.com/aljo242/koch/util/file_util"
 )
 
 // ChatHomeHandler is the route for the chat home where users can get assigned unique identifiers
