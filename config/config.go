@@ -7,24 +7,34 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aljo242/koch/util/file_util"
+
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
 const (
-	defaultConfigPath = "$HOME/.koch/config/"
+	DefaultConfigPath = "$HOME/.koch/config/"
 )
 
-func New() {
+func New(path string) {
+	// check if path exists
+	if !file_util.Exists(path) {
+		path = DefaultConfigPath
+	}
+
 	viper.SetConfigName("config")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath(defaultConfigPath)
+	viper.AddConfigPath(path)
 	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("fatal error config file %w", err))
+	}
 
 	// if no config file, write default to default cfg path
 	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 		// default config
-		viper.SafeWriteConfigAs(defaultConfigPath) // write current config to path
+		viper.SafeWriteConfigAs(path) // write current config to path
 	} else {
 		panic(fmt.Errorf("fatal error config file %w", err))
 	}
