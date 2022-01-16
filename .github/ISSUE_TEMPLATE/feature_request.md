@@ -2,19 +2,44 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: ''
-assignees: ''
+labels: enhancement
+assignees: aljo242
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+---
+name: Feature Request
+about: Create a proposal to request a feature
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+---
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+<!-- < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ☺ 
+v                            ✰  Thanks for opening an issue! ✰    
+v    Before smashing the submit button please review the template.
+v    Word of caution: poorly thought-out proposals may be rejected 
+v                     without deliberation 
+☺ > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >  -->
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## Summary
+
+<!-- Short, concise description of the proposed feature -->
+
+## Problem Definition
+
+<!-- Why do we need this feature? 
+What problems may be addressed by introducing this feature?
+What benefits does Koch stand to gain by including this feature?
+Are there any disadvantages of including this feature? -->
+
+## Proposal
+
+<!-- Detailed description of requirements of implementation -->
+
+____
+
+#### For Admin Use
+
+- [ ] Not duplicate issue
+- [ ] Appropriate labels applied
+- [ ] Appropriate contributors tagged
+- [ ] Contributor assigned/self-assigned

@@ -2,37 +2,45 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
-assignees: ''
+labels: bug
+assignees: aljo242
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+---
+name: Bug Report
+about: Create a report to help us squash bugs!
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+---
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+<!-- < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < < ☺ 
+v                            ✰  Thanks for opening an issue! ✰    
+v    Before smashing the submit button please review the template.
+v    Please also ensure that this is not a duplicate issue :)  
+☺ > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > >  -->
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+<!--
+IMPORTANT: Prior to opening a bug report, please check whether the issue discovered is affecting security. In such a
+case, please consider contacting us directly instead of opening a public issue on this repository.
+ -->
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+## Summary of Bug
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+<!-- Concisely describe the issue -->
 
-**Additional context**
-Add any other context about the problem here.
+## Version
+
+<!-- git commit hash or release version -->
+
+## Steps to Reproduce
+
+<!-- What commands in order should someone run to reproduce your problem? -->
+
+____
+
+## For Admin Use
+
+- [ ] Not duplicate issue
+- [ ] Appropriate labels applied
+- [ ] Appropriate contributors tagged
+- [ ] Contributor assigned/self-assigned
