@@ -7,12 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/http"
 	"os"
 	"sync"
 	"time"
-
-	"github.com/aljo242/koch/config"
 
 	"github.com/gorilla/mux"
 
@@ -22,10 +21,15 @@ import (
 // Server ...
 type Server struct {
 	http.Server
-	config    config.Config
-	wg        *sync.WaitGroup
-	quit      chan struct{}
-	isRunning bool
+	secure       bool
+	ip           string
+	port         string
+	hostname     string
+	shutdownCode int
+	userShutdown bool
+	wg           *sync.WaitGroup
+	quit         chan struct{}
+	isRunning    bool
 }
 
 func serverShutdownCallback() {
@@ -33,9 +37,9 @@ func serverShutdownCallback() {
 	log.Printf("shutting down server...")
 }
 
-func getTLSConfig(cfg config.Config) (*tls.Config, error) {
+func newTLSConfig(certFile, keyFile, rootCA string) (*tls.Config, error) {
 
-	cer, err := tls.LoadX509KeyPair(cfg.CertFile, cfg.KeyFile)
+	cer, err := tls.LoadX509KeyPair(certFile, keyFile)
 	if err != nil {
 		return &tls.Config{MinVersion: tls.VersionTLS12}, os.ErrNotExist
 	}
@@ -43,19 +47,19 @@ func getTLSConfig(cfg config.Config) (*tls.Config, error) {
 	rootCAPool := x509.NewCertPool()
 
 	// read rootCA file into byte
-	f, err := os.Open(cfg.RootCA)
+	f, err := os.Open(rootCA)
 	if err != nil {
 		return &tls.Config{MinVersion: tls.VersionTLS12}, os.ErrNotExist
 	}
 
 	b, err := ioutil.ReadAll(f)
 	if err != nil {
-		return &tls.Config{MinVersion: tls.VersionTLS12}, fmt.Errorf("error reading Root CA file %v : %w", cfg.RootCA, err)
+		return &tls.Config{MinVersion: tls.VersionTLS12}, fmt.Errorf("error reading Root CA file %v : %w", rootCA, err)
 	}
 
 	ok := rootCAPool.AppendCertsFromPEM(b)
 	if !ok {
-		return &tls.Config{MinVersion: tls.VersionTLS12}, fmt.Errorf("error appending Root CA cert %v : %w", cfg.RootCA, err)
+		return &tls.Config{MinVersion: tls.VersionTLS12}, fmt.Errorf("error appending Root CA cert %v : %w", rootCA, err)
 	}
 
 	return &tls.Config{
@@ -66,17 +70,22 @@ func getTLSConfig(cfg config.Config) (*tls.Config, error) {
 }
 
 // NewServer ...
-func NewServer(cfg config.Config, r *mux.Router) *Server {
+func NewServer(secure bool, ip string, port string, certFile string, keyFile string, rootCA string,
+	hostname string, shutdownCode int, cmdEnable bool, r *mux.Router) (*Server, error) {
+	var err error
 	tlsCfg := &tls.Config{MinVersion: tls.VersionTLS12}
-	addr := cfg.IP + ":" + cfg.Port
+	// check if IP is valid
+	if net.ParseIP(ip) == nil && ip != "localhost" {
+		return nil, ErrInvalidIP
+	}
+	addr := ip + ":" + port
 
-	if cfg.HTTPS {
-		var err error
-		tlsCfg, err = getTLSConfig(cfg)
+	if secure {
+		tlsCfg, err = newTLSConfig(certFile, keyFile, rootCA)
 		if err != nil {
-			log.Fatal().Err(err).Msg("error getting TLS config")
+			// log.Fatal().Err(err).Msg("error getting TLS config")
+			return nil, err
 		}
-		// TODO handle error
 	}
 
 	quit := make(chan struct{})
@@ -91,7 +100,12 @@ func NewServer(cfg config.Config, r *mux.Router) *Server {
 			MaxHeaderBytes:    1 << 20,
 			TLSConfig:         tlsCfg,
 		},
-		cfg,
+		secure,
+		ip,
+		port,
+		hostname,
+		shutdownCode,
+		cmdEnable,
 		&sync.WaitGroup{},
 		quit,
 		false,
@@ -99,7 +113,7 @@ func NewServer(cfg config.Config, r *mux.Router) *Server {
 
 	srv.RegisterOnShutdown(serverShutdownCallback)
 
-	return srv
+	return srv, nil
 }
 
 // Quit sends closes the server quit channel if the server is running
@@ -124,16 +138,16 @@ func (srv *Server) Run(running chan struct{}) {
 	go func() {
 		defer srv.wg.Done() // let main know we are done cleaning up
 		// always returns error. ErrServerClosed on graceful close
-		if srv.config.HTTPS {
+		if srv.secure {
 			// listen for HTTP traffic and redirect to HTTPS
 			go func(hostName string) {
-				httpAddr := srv.config.IP + ":80"
+				httpAddr := srv.ip + ":80"
 				httpsHost := "https://" + hostName
 				log.Printf("redirecting all traffic to http://%v/* to %v/*", httpAddr, httpsHost)
 				if err := http.ListenAndServe(httpAddr, http.HandlerFunc(RedirectHTTPS(httpsHost))); err != nil {
 					log.Fatal().Err(err).Msg("ListenAndServe error")
 				}
-			}(srv.config.Host)
+			}(srv.hostname)
 
 			if err := srv.ListenAndServeTLS("", ""); err != http.ErrServerClosed {
 				// unexpected error
@@ -157,7 +171,7 @@ func (srv *Server) Run(running chan struct{}) {
 			if err != nil {
 				fmt.Printf("error getting input: %v", err)
 			}
-			if code == srv.config.ShutdownCode {
+			if code == srv.shutdownCode {
 				break
 			}
 
@@ -170,7 +184,7 @@ func (srv *Server) Run(running chan struct{}) {
 		}
 	}
 
-	if srv.config.UserShutdown {
+	if srv.userShutdown {
 		go getUserInput()
 	}
 

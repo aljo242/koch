@@ -26,8 +26,8 @@ func init() {
 
 }
 
-func setupLogger(cfg config.Config) {
-	if cfg.DebugLog {
+func setupLogger(level string) {
+	if level == "debug" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		log.Debug().Msg("log level is DEBUG")
 	} else {
@@ -39,7 +39,7 @@ func setupLogger(cfg config.Config) {
 
 // SetupTemplates builds the template output directory, executes HTML templates,
 // and copies all web resource files to the template output directory (.js, .ts, .js.map, .css, .html)
-func SetupTemplates(cfg config.Config) ([]string, error) {
+func SetupTemplates(secure bool, hostName string) ([]string, error) {
 	files := make([]string, 0)
 	log.Debug().Msg("setting up templates")
 
@@ -124,7 +124,7 @@ func SetupTemplates(cfg config.Config) ([]string, error) {
 			case ".html":
 				newPath := filepath.Join(htmlOutputDir, filepath.Base(path))
 				log.Debug().Str("fromPath", path).Str("toPath", newPath).Msg("moving static web resources")
-				handleExecuteTemlateErr(template.ExecuteTemplateHTML(cfg, path, newPath))
+				handleExecuteTemlateErr(template.ExecuteTemplateHTML(secure, hostName, path, newPath))
 			case ".js", ".map":
 				newPath := filepath.Join(jsOutputDir, filepath.Base(path))
 				if filepath.Base(path) == "serviceWorker.js" || filepath.Base(path) == "serviceWorker.js.map" {
@@ -166,18 +166,16 @@ func SetupTemplates(cfg config.Config) ([]string, error) {
 }
 
 func initServer() *server.Server {
-	log.Printf("loading configuration in file: %v", configFile)
-	cfg, err := config.LoadConfig(configFile)
+	err := config.New(configFile)
 	if err != nil {
 		log.Fatal().Err(err).Msg("error loading config")
 		return nil
 	}
-	setupLogger(cfg)
 
-	cfg.Print()
+	setupLogger(config.LogLevel())
 
 	var hostIP string
-	if cfg.ChooseIP {
+	if config.ServerChooseIP() {
 
 		h, err := ip_util.HostInfo()
 		if err != nil {
@@ -191,10 +189,10 @@ func initServer() *server.Server {
 			return nil
 		}
 	} else {
-		hostIP = cfg.IP
+		hostIP = config.ServerIP()
 	}
 
-	_, err = SetupTemplates(cfg)
+	_, err = SetupTemplates(config.ServerSecure(), config.ServerHost())
 	if err != nil {
 		log.Fatal().Err(err).Msg("error setting up templates")
 		return nil
@@ -203,50 +201,63 @@ func initServer() *server.Server {
 	hub := chat.NewHub()
 	go hub.Run()
 
-	addr := hostIP + ":" + cfg.Port
+	addr := hostIP + ":" + config.ServerPort()
 
 	// generate/execute resource templates
 
 	// create new gorilla mux router
 	r := mux.NewRouter()
 	// attach pather with handler
-	r.HandleFunc("/home", handlers.HomeHandler(cfg.CacheMaxAge))
+	cacheMaxAge := config.ServerCacheMaxAge()
+	r.HandleFunc("/home", handlers.HomeHandler(cacheMaxAge))
 	r.HandleFunc("/", handlers.RedirectHome())
-	r.HandleFunc("/static/js/{scriptname}", handlers.ScriptsHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/static/css/{filename}", handlers.CSSHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/static/html/{filename}", handlers.HTMLHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/static/src/{filename}", handlers.TypeScriptHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/static/img/{filename}", handlers.ImageHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/static/model/{filename}", handlers.ModelHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/manifest.json", handlers.ManifestHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/serviceWorker.js", handlers.ServiceWorkerHandler(cfg.CacheMaxAge))
-	r.HandleFunc("/serviceWorker.js.map", handlers.ServiceWorkerHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/static/js/{scriptname}", handlers.ScriptsHandler(cacheMaxAge))
+	r.HandleFunc("/static/css/{filename}", handlers.CSSHandler(cacheMaxAge))
+	r.HandleFunc("/static/html/{filename}", handlers.HTMLHandler(cacheMaxAge))
+	r.HandleFunc("/static/src/{filename}", handlers.TypeScriptHandler(cacheMaxAge))
+	r.HandleFunc("/static/img/{filename}", handlers.ImageHandler(cacheMaxAge))
+	r.HandleFunc("/static/model/{filename}", handlers.ModelHandler(cacheMaxAge))
+	r.HandleFunc("/manifest.json", handlers.ManifestHandler(cacheMaxAge))
+	r.HandleFunc("/serviceWorker.js", handlers.ServiceWorkerHandler(cacheMaxAge))
+	r.HandleFunc("/serviceWorker.js.map", handlers.ServiceWorkerHandler(cacheMaxAge))
 	r.HandleFunc("/tunes/home", handlers.RedirectConstructionHandler())
 	r.HandleFunc("/shop/home", handlers.RedirectConstructionHandler())
 	// r.HandleFunc("/chat/{name}", handlers.ChatHomeHandler("", cfg.DebugLog))
 	// CHAT HANDLERs
-	r.HandleFunc("/chat/home", handlers.ChatHomeHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/chat/home", handlers.ChatHomeHandler(cacheMaxAge))
 	r.HandleFunc("/chat/ws", chat.ServeWs(hub))
 	r.HandleFunc("/chat/signup", handlers.RedirectConstructionHandler())
 	r.HandleFunc("/chat/signin", handlers.RedirectConstructionHandler())
 	// file handler
-	r.HandleFunc("/files/{filename}", handlers.MiscFileHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/files/{filename}", handlers.MiscFileHandler(cacheMaxAge))
 
 	// RESUME HANDLER
-	r.HandleFunc("/resume/home", handlers.ResumeHomeHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/resume/home", handlers.ResumeHomeHandler(cacheMaxAge))
 
 	// UNDER CONSTRUCTION
-	r.HandleFunc("/under-construction", handlers.ConstructionHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/under-construction", handlers.ConstructionHandler(cacheMaxAge))
 
 	// HALL OF ART
-	r.HandleFunc("/hall-of-art/home", handlers.HallofArtHomeHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/hall-of-art/home", handlers.HallofArtHomeHandler(cacheMaxAge))
 
 	// DONATE PAGES
-	r.HandleFunc("/donate/{cryptoname}", handlers.DonateHandler(cfg.CacheMaxAge))
+	r.HandleFunc("/donate/{cryptoname}", handlers.DonateHandler(cacheMaxAge))
 
 	fmt.Printf("\n")
 	log.Printf("starting Server at: %v...", addr)
-	srv := server.NewServer(cfg, r)
+	srv, err := server.NewServer(config.ServerSecure(),
+		config.ServerIP(),
+		config.ServerPort(),
+		config.ServerCertFile(),
+		config.ServerKeyFile(),
+		config.ServerRootCA(),
+		config.ServerHost(),
+		config.ServerShutdownCode(),
+		config.ServerCmdEnable(), r)
+
+	if err != nil {
+		panic(err)
+	}
 
 	return srv
 }

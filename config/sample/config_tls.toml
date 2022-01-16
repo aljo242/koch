@@ -18,15 +18,15 @@ level = "debug"
 # add desc
 [server]
 host = "localhost"
-port = "80"
+port = "443"
 IP = "localhost"
 chooseIP = false
 secure = false
 debugLog = true
 cmdEnable = false
-certFile = "" # no cert 
-keyFile = "" # no key
-rootCA = "" # no root
+certFile = "./sample/localhost.crt"
+keyFile = "./sample/localhost.key"
+rootCA = "./sample/rootCA.crt"
 cacheMaxAge = 180
 shutdownCode = -3
 # add content
