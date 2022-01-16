@@ -17,7 +17,7 @@ const (
 	DefaultConfigPath = "$HOME/.koch/config/"
 )
 
-func New(path string) {
+func New(path string) error {
 	// check if path exists
 	if !file_util.Exists(path) {
 		path = DefaultConfigPath
@@ -27,18 +27,17 @@ func New(path string) {
 	viper.SetConfigType("toml")
 	viper.AddConfigPath(path)
 	err := viper.ReadInConfig()
-	if err != nil {
-		panic(fmt.Errorf("fatal error config file %w", err))
-	}
 
 	// if no config file, write default to default cfg path
 	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 		// default config
-		viper.SafeWriteConfigAs(path) // write current config to path
-	} else {
-		panic(fmt.Errorf("fatal error config file %w", err))
+		err = viper.SafeWriteConfigAs(path) // write current config to path\
+	}
+	if err != nil {
+		return fmt.Errorf("fatal error config file %w", err)
 	}
 
+	return nil
 }
 
 // Config is the general struct holds parsed JSON config info

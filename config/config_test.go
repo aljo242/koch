@@ -1,7 +1,11 @@
 package config
 
-import "testing"
+import (
+	"github.com/stretchr/testify/require"
+	"testing"
+)
 
 func TestNew(t *testing.T) {
-	New("./sample/")
+	err := New("./sample/")
+	require.NoError(t, err)
 }
