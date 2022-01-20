@@ -3,6 +3,8 @@ package config
 import (
 	"errors"
 	"fmt"
+	"os/user"
+	"path/filepath"
 
 	"github.com/aljo242/koch/util/file_util"
 
@@ -10,8 +12,20 @@ import (
 )
 
 const (
-	DefaultConfigPath = "$HOME/.koch/config/"
+	DefaultConfigPath = ".koch/config/"
 )
+
+var (
+	homeDir string
+)
+
+func init() {
+	user, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	homeDir = user.HomeDir
+}
 
 // ErrInvalidConfig indicates that the config file is invalid
 var ErrInvalidConfig = errors.New("invalid config")
@@ -19,7 +33,7 @@ var ErrInvalidConfig = errors.New("invalid config")
 func New(path string) error {
 	// check if path exists
 	if !file_util.Exists(path) {
-		path = DefaultConfigPath
+		path = filepath.Join(homeDir, DefaultConfigPath)
 	}
 
 	viper.SetConfigName("config")
@@ -27,11 +41,6 @@ func New(path string) error {
 	viper.AddConfigPath(path)
 	err := viper.ReadInConfig()
 
-	// if no config file, write default to default cfg path
-	if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-		// default config
-		err = viper.SafeWriteConfigAs(path) // write current config to path
-	}
 	if err != nil {
 		return fmt.Errorf("fatal error config file %w", err)
 	}

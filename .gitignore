@@ -18,3 +18,7 @@
 .vscode
 .idea
 
+# coverage output
+cover.html
+coverage.txt
+
